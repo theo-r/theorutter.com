@@ -1,5 +1,5 @@
 from aws_cdk import CfnOutput, Stack
-from static_site import StaticSitePublicS3, StaticSitePrivateS3
+from static_site import StaticSitePublicS3
 
 
 class StaticSiteStack(Stack):
@@ -12,30 +12,17 @@ class StaticSiteStack(Stack):
                 f'{props["sub_domain_name"]}.{props["domain_name"]}'
             )
 
-        # If S3 website endpoint enabled, it creates the static site using a
-        # public S3 as the origin. Otherwise, it creates a private S3 as the
-        # origin.
-        if props["enable_s3_website_endpoint"]:
-            site = StaticSitePublicS3(
-                self,
-                f"{props['namespace']}-construct",
-                site_domain_name=site_domain_name,
-                domain_certificate_arn=props["domain_certificate_arn"],
-                origin_referer_header_parameter_name=props[
-                    "origin_custom_header_parameter_name"
-                ],
-                hosted_zone_id=props["hosted_zone_id"],
-                hosted_zone_name=props["hosted_zone_name"],
-            )
-        else:
-            site = StaticSitePrivateS3(
-                self,
-                f"{props['namespace']}-construct",
-                site_domain_name=site_domain_name,
-                domain_certificate_arn=props["domain_certificate_arn"],
-                hosted_zone_id=props["hosted_zone_id"],
-                hosted_zone_name=props["hosted_zone_name"],
-            )
+        site = StaticSitePublicS3(
+            self,
+            f"{props['namespace']}-construct",
+            site_domain_name=site_domain_name,
+            domain_certificate_arn=props["domain_certificate_arn"],
+            origin_referer_header_parameter_name=props[
+                "origin_custom_header_parameter_name"
+            ],
+            hosted_zone_id=props["hosted_zone_id"],
+            hosted_zone_name=props["hosted_zone_name"],
+        )
 
         # Add stack outputs
         CfnOutput(

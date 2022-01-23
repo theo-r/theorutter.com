@@ -1,7 +1,5 @@
 """
-Two constructs to host static sites in aws using S3, cloudfront and Route53.
-StaticSitePrivateS3 creates a private S3 bucket and uses S3 API endpoint as
-an origin in cloudfront and Origin Access Identity (OAI) to access the s3 objects.
+Construct to host static sites in aws using S3, cloudfront and Route53.
 StaticSitePublicS3 creates a public S3 bucket with website enabled and
 uses Origin Custom Header (referer) to limit the access of s3 objects to the
 CloudFront only.
@@ -110,44 +108,6 @@ class StaticSite(Construct):
                 hosted_zone=hosted_zone,
                 region="us-east-1",
             )
-
-
-class StaticSitePrivateS3(StaticSite):
-    def __init__(
-        self,
-        scope,
-        construct_id,
-        **kwargs,
-    ):
-        super().__init__(scope, construct_id, **kwargs)
-
-        self._build_site()
-
-    def _create_site_bucket(self):
-        """Creates a private S3 bucket for the static site construct"""
-        self.bucket = s3.Bucket(
-            self,
-            "site_bucket",
-            bucket_name=self._site_domain_name,
-            encryption=s3.BucketEncryption.S3_MANAGED,
-            block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
-            removal_policy=RemovalPolicy.DESTROY,
-            auto_delete_objects=True,
-        )
-
-    def _create_cloudfront_distribution(self):
-        """Create a cloudfront distribution with a private bucket as the origin"""
-        self.distribution = cloudfront.Distribution(
-            self,
-            "cloudfront_distribution",
-            default_behavior=cloudfront.BehaviorOptions(
-                origin=origins.S3Origin(self.bucket),
-                viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-            ),
-            domain_names=[self._site_domain_name],
-            certificate=self.certificate,
-            default_root_object="index.html",
-        )
 
 
 class StaticSitePublicS3(StaticSite):
