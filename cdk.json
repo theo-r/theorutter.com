@@ -5,7 +5,6 @@
       "domain_name": "theorutter.com",
       "enable_s3_website_endpoint": true,
       "origin_custom_header_parameter_name": "/prod/static-site/origin-custom-header/referer",
-      "hosted_zone_id": "{hosted_zone_id}",
       "hosted_zone_name": "theorutter.com"
     }
   }

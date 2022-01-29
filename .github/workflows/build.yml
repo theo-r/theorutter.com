@@ -1,0 +1,66 @@
+name: Build
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+
+      - name: Install CDK and Gatsby
+        run: |
+          npm install -g aws-cdk gatsby-cli
+
+      - name: Build Gatsby
+        run: |
+          pushd web
+          npm ci
+          gatsby clean
+          gatsby build
+          popd
+
+      - name: Synth CDK
+        run: |
+          HOSTED_ZONE_ID = $(aws route53 list-hosted-zones --output json --query 'HostedZones[?contains(Name, `theorutter.com`)]|[0].Id').replace("/hostedzone/", "")
+          cdk synth --context hosted_zone_id=$HOSTED_ZONE_ID
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          CDK_DEPLOY_ACCOUNT: ${{ secrets.CDK_DEPLOY_ACCOUNT }}
+          CDK_DEPLOY_REGION: ${{ secrets.CDK_DEPLOY_REGION }}
+
+      - name: Deploy CDK
+        run: |
+          HOSTED_ZONE_ID = $(aws route53 list-hosted-zones --output json --query 'HostedZones[?contains(Name, `theorutter.com`)]|[0].Id').replace("/hostedzone/", "")
+          cdk deploy --context hosted_zone_id=$HOSTED_ZONE_ID --require-approval never "*"
+        if: github.ref == 'refs/heads/master'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          CDK_DEPLOY_ACCOUNT: ${{ secrets.CDK_DEPLOY_ACCOUNT }}
+          CDK_DEPLOY_REGION: ${{ secrets.CDK_DEPLOY_REGION }}
+
+      - name: Publish web assets
+        run: |
+          aws s3 sync --delete --exact-timestamps ./web/public/ s3://theorutter.com
+        if: github.ref == 'refs/heads/master'
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Invalidate CloudFront
+        run: |
+          DISTRIBUTION_ID=$(aws cloudfront list-distributions --output text --query 'DistributionList.Items[?contains(Aliases.Items, `theorutter.com`)]|[0].Id')
+          aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths '/*'
+        if: github.ref == 'refs/heads/master'
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
