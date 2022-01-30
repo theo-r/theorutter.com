@@ -34,6 +34,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           CDK_DEPLOY_ACCOUNT: ${{ secrets.CDK_DEPLOY_ACCOUNT }}
           CDK_DEPLOY_REGION: ${{ secrets.CDK_DEPLOY_REGION }}
+          AWS_REGION: ${{ secrets.CDK_DEPLOY_REGION }}
 
       - name: Deploy CDK
         shell: pwsh
