@@ -123,4 +123,4 @@ jobs:
 Success! Our Github Actions workflow has access to our AWS resources with
 no pesky long-lived access credentials lurking in the shadows.
 
-The full source code can be found [here]](https://github.com/theo-r/aws-oidc-provider)
+The full source code can be found [here](https://github.com/theo-r/aws-oidc-provider).
