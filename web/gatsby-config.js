@@ -3,7 +3,7 @@ module.exports = {
     title: `Theo Rutter`,
     author: {
       name: `Theo Rutter`,
-      summary: `who lives and works in Nottingham building things.`,
+      summary: `who lives and works in Nottingham.`,
     },
     description: `My blog`,
     siteUrl: `https://theorutter.com`,

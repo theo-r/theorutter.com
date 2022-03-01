@@ -68,6 +68,8 @@ instance/
 # Scrapy stuff:
 .scrapy
 
+ref.md
+
 # cdk
 cdk.out/
 
