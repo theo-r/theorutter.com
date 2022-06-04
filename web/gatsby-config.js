@@ -8,7 +8,7 @@ module.exports = {
     description: `My blog`,
     siteUrl: `https://theorutter.com`,
     social: {
-      instagram: `theorutter`,
+      github: `theo-r`,
     },
   },
   plugins: [
