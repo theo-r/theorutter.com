@@ -3,7 +3,7 @@ import { Link } from 'gatsby';
 import './navbar.css'
 
 const Navbar = () => {
-    const navMenuItem = ["Home", "About"];
+    const navMenuItem = ["Home", "About", "CV"];
 
     const navMenuLiTag = navMenuItem.map((item) => {
         let pageLink = "";

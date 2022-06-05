@@ -179,7 +179,7 @@ ol {
 
 ul li,
 ol li {
-  padding-left: var(--spacing-0);
+  padding-left: var(--spacing-8);
   margin-bottom: calc(var(--spacing-8) / 2);
 }
 
