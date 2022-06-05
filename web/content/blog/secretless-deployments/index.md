@@ -1,7 +1,7 @@
 ---
 title: Secretless Deployments to AWS using Github Actions and AWS CDK
 date: "2022-03-01T22:12:03.284Z"
-description: "Learn how set up an OIDC provider using the AWS CDK."
+description: "Learn how to set up an OIDC provider using the AWS CDK."
 ---
 
 A couple of weeks ago I read a fantastic blog post called [Stop using static cloud credentials in GitHub Actions](https://www.leebriggs.co.uk/blog/2022/01/23/gha-cloud-credentials.html). The post talks about a common headache when deploying to public cloud providers 
