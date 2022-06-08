@@ -1,5 +1,7 @@
-from aws_cdk import CfnOutput, Stack
+from aws_cdk import CfnOutput, Stack, aws_lambda as _lambda
 from static_site import StaticSitePublicS3
+import aws_cdk.aws_apigatewayv2_alpha as apigwv2
+from aws_cdk.aws_apigatewayv2_integrations_alpha import HttpLambdaIntegration
 
 
 class StaticSiteStack(Stack):
@@ -24,7 +26,35 @@ class StaticSiteStack(Stack):
             hosted_zone_name=props["hosted_zone_name"],
         )
 
-        # Add stack outputs
+        test_lambda = _lambda.Function(self, "TestLambda",
+            runtime=_lambda.Runtime.PYTHON_3_9,
+            handler="test_lambda.lambda_handler",
+            code=_lambda.Code.from_asset(path="test-lambda")
+        )
+
+        user_query_integration = HttpLambdaIntegration(
+            "TestIntegration", 
+            test_lambda
+        )
+
+        http_api = apigwv2.HttpApi(self, "HttpApi")
+
+        http_api.add_routes(
+            path="/get_tracks_data",
+            methods=[apigwv2.HttpMethod.GET],
+            integration=user_query_integration
+        )
+
+        CfnOutput(
+            self,
+            "HttpApiEndpoint",
+            value=http_api.api_endpoint
+        )
+        CfnOutput(
+            self,
+            "HttpApiId",
+            value=http_api.api_id
+        )
         CfnOutput(
             self,
             "SiteBucketName",
