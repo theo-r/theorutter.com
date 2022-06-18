@@ -13,7 +13,8 @@ from aws_cdk import (
     aws_route53_targets as targets,
     aws_iam as iam,
     aws_ssm as ssm,
-    RemovalPolicy
+    RemovalPolicy,
+    Duration
 )
 from constructs import Construct
 
@@ -179,6 +180,109 @@ class StaticSitePublicS3(StaticSite):
                             is_default_behavior=True,
                         )
                     ],
+                )
+            ],
+            viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+            price_class=cloudfront.PriceClass.PRICE_CLASS_ALL,
+        )
+
+
+class StaticSitePublicS3ApiGateway(StaticSite):
+    def __init__(
+        self,
+        scope,
+        construct_id,
+        origin_referer_header_parameter_name,
+        apigw_domain_name,
+        api_cors_edge_lambda,
+        **kwargs,
+    ):
+        super().__init__(scope, construct_id, **kwargs)
+
+        # Get the origin referer header value
+        self.__origin_referer_header = self.__get_referer_header(
+            origin_referer_header_parameter_name,
+        )
+
+        self.__apigw_domain_name = apigw_domain_name
+
+        self.__api_cors_edge_lambda = api_cors_edge_lambda
+
+        self._build_site()
+
+    def __get_referer_header(self, parameter_name):
+        return ssm.StringParameter.from_string_parameter_attributes(
+            self, "custom_header", parameter_name=parameter_name
+        ).string_value
+
+    def _create_site_bucket(self):
+        """Creates a public S3 bucket for the static site construct"""
+        self.bucket = s3.Bucket(
+            self,
+            "site_bucket",
+            bucket_name=self._site_domain_name,
+            website_index_document="index.html",
+            website_error_document="404.html",
+            removal_policy=RemovalPolicy.DESTROY,
+            auto_delete_objects=True,
+        )
+        bucket_policy = iam.PolicyStatement(
+            actions=["s3:GetObject"],
+            resources=[self.bucket.arn_for_objects("*")],
+            principals=[iam.AnyPrincipal()],
+        )
+        bucket_policy.add_condition(
+            "StringEquals",
+            {"aws:Referer": self.__origin_referer_header},
+        )
+
+        self.bucket.add_to_resource_policy(bucket_policy)
+
+    def _create_cloudfront_distribution(self):
+        """Create a cloudfront distribution with a public bucket as the origin"""
+        s3_origin_source = cloudfront.CustomOriginConfig(
+            domain_name=self.bucket.bucket_website_domain_name,
+            origin_protocol_policy=cloudfront.OriginProtocolPolicy.HTTP_ONLY,
+            origin_headers={"Referer": self.__origin_referer_header},
+        )
+
+        apigw_origin_source = cloudfront.CustomOriginConfig(
+            domain_name=self.__apigw_domain_name,
+            origin_protocol_policy=cloudfront.OriginProtocolPolicy.HTTPS_ONLY,
+        )
+
+        self.distribution = cloudfront.CloudFrontWebDistribution(
+            self,
+            "CloudfrontDistribution",
+            viewer_certificate = cloudfront.ViewerCertificate.from_acm_certificate(self.certificate,
+                aliases=[self._site_domain_name],
+                security_policy=cloudfront.SecurityPolicyProtocol.TLS_V1_2_2019,
+                ssl_method=cloudfront.SSLMethod.SNI
+            ),
+            origin_configs=[
+                cloudfront.SourceConfiguration(
+                    custom_origin_source=s3_origin_source,
+                    behaviors=[
+                        cloudfront.Behavior(
+                            is_default_behavior=True,
+                        )
+                    ],
+                ),
+                cloudfront.SourceConfiguration(
+                    custom_origin_source=apigw_origin_source,
+                    behaviors=[
+                        cloudfront.Behavior(
+                            is_default_behavior=False,
+                            path_pattern="api/*",
+                            max_ttl=Duration.millis(0),
+                            lambda_function_associations=[
+                                cloudfront.LambdaFunctionAssociation(
+                                    event_type=cloudfront.LambdaEdgeEventType.ORIGIN_RESPONSE,
+                                    lambda_function=self.__api_cors_edge_lambda
+                                )
+                            ]
+                        )
+                    ]
                 )
             ],
             viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
