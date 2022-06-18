@@ -46,14 +46,6 @@ class StaticSiteStack(Stack):
             integration=hello_integration
         )
 
-        api_cors_edge_lambda = cloudfront.experimental.EdgeFunction(
-            self,
-            "ApiCors",
-            runtime=_lambda.Runtime.PYTHON_3_9,
-            handler="api_cors.lambda_handler",
-            code=_lambda.Code.from_asset(path="cloudfront")
-        )
-        
         site_domain_name = props["domain_name"]
         if props["sub_domain_name"]:
             site_domain_name = (
@@ -71,7 +63,6 @@ class StaticSiteStack(Stack):
             hosted_zone_id=props["hosted_zone_id"],
             hosted_zone_name=props["hosted_zone_name"],
             apigw_domain_name=f"{http_api.api_id}.execute-api.{self.region}.amazonaws.com",
-            api_cors_edge_lambda=api_cors_edge_lambda
         )
 
         CfnOutput(
