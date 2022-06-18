@@ -194,7 +194,6 @@ class StaticSitePublicS3ApiGateway(StaticSite):
         construct_id,
         origin_referer_header_parameter_name,
         apigw_domain_name,
-        api_cors_edge_lambda,
         **kwargs,
     ):
         super().__init__(scope, construct_id, **kwargs)
@@ -205,8 +204,6 @@ class StaticSitePublicS3ApiGateway(StaticSite):
         )
 
         self.__apigw_domain_name = apigw_domain_name
-
-        self.__api_cors_edge_lambda = api_cors_edge_lambda
 
         self._build_site()
 
@@ -275,12 +272,6 @@ class StaticSitePublicS3ApiGateway(StaticSite):
                             is_default_behavior=False,
                             path_pattern="api/*",
                             max_ttl=Duration.millis(0),
-                            lambda_function_associations=[
-                                cloudfront.LambdaFunctionAssociation(
-                                    event_type=cloudfront.LambdaEdgeEventType.ORIGIN_RESPONSE,
-                                    lambda_function=self.__api_cors_edge_lambda
-                                )
-                            ]
                         )
                     ]
                 )
