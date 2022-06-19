@@ -1,5 +1,5 @@
 ---
-title: Secretless Deployments to AWS using Github Actions and AWS CDK
+title: Secretless Deployments to AWS with Github Actions and AWS CDK
 date: "2022-03-01T22:12:03.284Z"
 description: "Learn how to set up an OIDC provider using the AWS CDK."
 ---

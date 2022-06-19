@@ -272,6 +272,9 @@ class StaticSitePublicS3ApiGateway(StaticSite):
                             is_default_behavior=False,
                             path_pattern="api/*",
                             max_ttl=Duration.millis(0),
+                            forwarded_values=cloudfront.CfnDistribution.ForwardedValuesProperty(
+                                query_string=True
+                            ),
                         )
                     ]
                 )
