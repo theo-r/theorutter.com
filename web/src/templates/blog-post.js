@@ -1,9 +1,11 @@
 import * as React from "react"
 import { Link, graphql } from "gatsby"
 
+import HitCounter from "../components/hitcounter"
 import Bio from "../components/bio"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
+
 
 const BlogPostTemplate = ({ data, location }) => {
   const post = data.markdownRemark
@@ -33,6 +35,7 @@ const BlogPostTemplate = ({ data, location }) => {
         <footer>
           <Bio />
         </footer>
+        <HitCounter title={post.frontmatter.title}></HitCounter>
       </article>
       <nav className="blog-post-nav">
         <ul
