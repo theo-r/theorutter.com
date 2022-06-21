@@ -16,6 +16,7 @@ class StaticSiteStack(Stack):
         # create dynamo table
         hit_counter_table = dynamodb.Table(
             self, "HitCounterTable",
+            billing_mode=dynamodb.BillingMode.PAY_PER_REQUEST,
             partition_key=dynamodb.Attribute(
                 name="slug",
                 type=dynamodb.AttributeType.STRING
