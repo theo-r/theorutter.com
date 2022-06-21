@@ -3,6 +3,7 @@
 import os
 from aws_cdk import App, Environment
 from site_stack import StaticSiteStack
+from api_stack import ApiStack
 
 
 app = App()
@@ -32,12 +33,21 @@ env = Environment(
     ),
 )
 
+api = ApiStack(
+    scope=app,
+    construct_id=f"{props['namespace']}-api-stack",
+    props=props,
+    env=env,
+    description="Serverless backend for the static site using Lambda HttpApis"
+)
+
 StaticSite = StaticSiteStack(
     scope=app,
     construct_id=f"{props['namespace']}-stack",
     props=props,
     env=env,
     description="Static Site using S3, CloudFront and Route53",
+    api=api
 )
 
 app.synth()
