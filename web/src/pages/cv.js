@@ -11,23 +11,55 @@ const CV = ({ data, location }) => {
             <h2>Experience</h2>
             Oct 2021 - Present
             <br></br>
-            <strong>Application Security Engineer</strong> at BP
+            <strong>Security Engineer</strong> at bp
             <ul>
                 <li>
-                    Worked in a cross functional role providing security assurance,
-                    engineering and design services for product teams building
-                    cloud data platforms in AWS and Azure while owning and delivering
-                    security features on the platforms.
+                    Designed and implemented a new access control model for a project 
+                    replacing write access for all developers with reduced privileges 
+                    in higher environments. Created a repository to store developer 
+                    access as code and automated the access granting process 
+                    to remove bottlenecks on team leads
                 </li>
                 <li>
-                    Developed numerous build and deployment pipelines for Python
-                    and C# serverless applications in Azure DevOps and helped
-                    design and standardize a CI/CD framework to include automated
-                    SAST and SCA.
+                    Led threat modelling sessions with development teams using the 
+                    STRIDE framework to identify vulnerabilities in their designs
                 </li>
                 <li>
-                    Prepared and delivered presentations and technical 
-                    demonstrations for customers and senior leadership teams.
+                    Performed code reviews for product teams and explained security best practices
+                </li>
+                <li>
+                    Developed and maintained a service to rotate AWS IAM user secrets and synchronise 
+                    them with applications in Azure Active Directory
+                </li>
+            </ul>
+            Oct 2020 - Sep 2021
+            <br></br>
+            <strong>Cloud Engineer</strong> at Elastacloud
+            <ul>
+                <li>
+                    Designed and implemented a new access control model for a project 
+                    replacing write access for all developers with reduced privileges 
+                    in higher environments. Created a repository to store developer 
+                    access as code and automated the access granting process 
+                    to remove bottlenecks on team leads
+                </li>
+                <li>
+                    Led threat modelling sessions with development teams using the 
+                    STRIDE framework to identify vulnerabilities in their designs
+                </li>
+                <li>
+                    Created documentation on best practices for writing integration tests 
+                    of serverless applications so that they can be integrated in CI/CD pipelines
+                </li>
+            </ul>
+            <h2>Projects</h2>
+            <ul>
+                <li>
+                  Created a web application reporting my Spotify listening habits. 
+                  The app is deployed in AWS using a Lambda backend to refresh a 
+                  Glue table hourly; the front end queries the table using Athena. 
+                  The infrastructure is created with the AWS CDK and deployed using 
+                  Github Actions. <a href="https://share.streamlit.io/theo-r/hotspot/hotspot/hotspot.py">Link here.</a>
                 </li>
             </ul>
             <h2>Education</h2>
