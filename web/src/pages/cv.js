@@ -37,15 +37,13 @@ const CV = ({ data, location }) => {
             <strong>Cloud Engineer</strong> at Elastacloud
             <ul>
                 <li>
-                    Designed and implemented a new access control model for a project 
-                    replacing write access for all developers with reduced privileges 
-                    in higher environments. Created a repository to store developer 
-                    access as code and automated the access granting process 
-                    to remove bottlenecks on team leads
+                    Developed CI/CD pipelines for Python applications with stages for 
+                    linting, unit tests, SAST and SCA with Checkmarx and deployment to Azure
                 </li>
                 <li>
-                    Led threat modelling sessions with development teams using the 
-                    STRIDE framework to identify vulnerabilities in their designs
+                    Refactored an AWS microservice to use step functions instead of independent scheduled 
+                    steps; the refactor reduced the average time to run from hours to 
+                    minutes while making the service easier to understand and maintain
                 </li>
                 <li>
                     Created documentation on best practices for writing integration tests 
