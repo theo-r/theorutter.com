@@ -21,13 +21,13 @@ class ApiStack(Stack):
         )
 
         default_lambda = _lambda.Function(self, "DefaultLambda",
-            runtime=_lambda.Runtime.PYTHON_3_9,
+            runtime=_lambda.Runtime.PYTHON_3_13,
             handler="index.lambda_handler",
             code=_lambda.Code.from_asset(path="api/default")
         )
 
         hit_counter_lambda = _lambda.Function(self, "HitCounterLambda",
-            runtime=_lambda.Runtime.PYTHON_3_9,
+            runtime=_lambda.Runtime.PYTHON_3_13,
             handler="index.lambda_handler",
             code=_lambda.Code.from_asset(path="api/hit_counter")
             )
