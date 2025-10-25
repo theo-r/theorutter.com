@@ -8,33 +8,31 @@ const CV = ({ data, location }) => {
     const siteTitle = data.site.siteMetadata?.title || `Title`
     return (
         <Layout location={location} title={siteTitle}>
+            I am a software engineer with over 5 years of experience designing and building enterprise scale data applications
+            in AWS and Azure.
             <h2>Experience</h2>
             Oct 2021 - Present
             <br></br>
-            <strong>Security Engineer</strong> at bp
+            <strong>Software Engineer - Data Security</strong> at bp
             <ul>
                 <li>
-                    Designed and implemented a new access control model for a project 
-                    replacing write access for all developers with reduced privileges 
-                    in higher environments. Created a repository to store developer 
-                    access as code and automated the access granting process 
-                    to remove bottlenecks on team leads
+                    Wrote and presented multiple design decisions related to IAM, Networking and Data Security
+                    to the bp enterprise design forum as phase one of a large scale migration with over 50 KDDs.
                 </li>
                 <li>
-                    Led threat modelling sessions with development teams using the 
-                    STRIDE framework to identify vulnerabilities in their designs
+                    Led a project demonstrating how a streaming ingestion of networking data 
+                    could be migrated to Databricks to save more than £100k per year.
                 </li>
                 <li>
-                    Performed code reviews for product teams and explained security best practices
+                    Mentored junior engineers and managed their workloads.
                 </li>
                 <li>
-                    Developed and maintained a service to rotate AWS IAM user secrets and synchronise 
-                    them with applications in Azure Active Directory
+                    Developed re-usable components for DevSecOps pipelines saving time for 4 developer teams.
                 </li>
             </ul>
             Oct 2020 - Sep 2021
             <br></br>
-            <strong>Cloud Engineer</strong> at Elastacloud
+            <strong>Data Engineer</strong> at Elastacloud
             <ul>
                 <li>
                     Developed CI/CD pipelines for Python applications with stages for 
@@ -57,7 +55,7 @@ const CV = ({ data, location }) => {
                   The app is deployed in AWS using a Lambda backend to refresh a 
                   Glue table hourly; the front end queries the table using Athena. 
                   The infrastructure is created with the AWS CDK and deployed using 
-                  Github Actions. <a href="https://share.streamlit.io/theo-r/hotspot/hotspot/hotspot.py">Link here.</a>
+                  Github Actions. <a href="https://hotspot.streamlit.app">Link here.</a>
                 </li>
             </ul>
             <h2>Education</h2>
@@ -67,19 +65,7 @@ const CV = ({ data, location }) => {
             <br></br>
             <i>Integrated Master's in Mathematics and Statistics (First Class)</i>
             <h2>Skills</h2>
-            <ul>
-                <li>Python</li>
-                <li>C#</li>
-                <li>Powershell</li>
-                <li>Bash</li>
-                <li>AWS</li>
-                <li>Azure</li>
-                <li>ADO YAML Pipelines</li>
-                <li>IaC (Cloudformation, Bicep)</li>
-                <li>Linux</li>
-                <li>Git</li>
-                <li>Docker</li>
-            </ul>
+            <p>Python, C#, Powershell, Bash, AWS, Azure, Azure Devops Pipelines, IaC (Terraform, Cloudformation, Bicep), Docker, Git, Linux, PowerBI</p>
             <Bio />
         </Layout>
     )
